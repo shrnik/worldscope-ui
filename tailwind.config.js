@@ -12,6 +12,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        geist: ["GiestRegular", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

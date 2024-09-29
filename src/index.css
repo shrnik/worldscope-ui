@@ -67,3 +67,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+@font-face {
+  font-family: "GiestRegular";
+  src: local("GiestRegular"),
+    url("../public/fonts/Geist-Regular.otf") format("opentype");
+  font-weight: normal;
+}
+
+html {
+  font-family: "GiestRegular", sans-serif;
+}

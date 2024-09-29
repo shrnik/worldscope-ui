@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useState, useEffect } from "react";
 import { FixedSizeGrid as Grid } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
