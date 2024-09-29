@@ -1,11 +1,13 @@
+import { useLocation } from "react-router";
 import useSwr from "swr";
+import KeyMapping from "../keys";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function useSheetData() {
   const { data, ...rest } = useSwr<{ values: string[][] }>(`sheetData`, () =>
     fetcher(
-      "https://sheets.googleapis.com/v4/spreadsheets/1_qydsWQ2SJlmpdB_NZLdipwT8GwznKd6YXHxd6CEgtA/values/Main?alt=json&key=AIzaSyA6pmS1gW0a3dWzxdYOfo-sE5hmmvGrW8M"
+      "https://sheets.googleapis.com/v4/spreadsheets/1_tbi4WTx9qGErN-2cvYvEd3qeJxgzd_9N9HJWWPD7SA/values/Main?alt=json&key=AIzaSyA6pmS1gW0a3dWzxdYOfo-sE5hmmvGrW8M"
     )
   );
 
@@ -17,10 +19,28 @@ export default function useSheetData() {
       return acc;
     }, {} as Record<string, string>)
   );
-
   return {
     data: jsonData,
+    ...rest,
+  };
+}
 
+export function useFilteredSheetData() {
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const { data, ...rest } = useSheetData();
+  if (!params.get("tags")) {
+    return {
+      data,
+      ...rest,
+    };
+  }
+  const tags = params.get("tags")?.split(",") || [];
+  const filteredData = data?.filter((row) => {
+    return tags.some((tag) => row[KeyMapping.tags]?.includes(tag));
+  });
+  return {
+    data: filteredData,
     ...rest,
   };
 }

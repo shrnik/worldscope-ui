@@ -1,14 +1,21 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import { useState, useEffect } from "react";
 import { FixedSizeGrid as Grid } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import KeyMapping from "../keys";
+import { Badge } from "../components/ui/badge";
 
 interface ImageGridProps {
-  imageUrls: string[];
+  data: Record<string, string>[];
+  urlKey?: string;
 }
 
-export default function ImageGrid({ imageUrls = [] }: ImageGridProps) {
+export default function ImageGrid({
+  data,
+  urlKey = KeyMapping.imageUrl,
+}: ImageGridProps) {
+  const imageUrls = useMemo(() => data.map((d) => d[urlKey]), [data, urlKey]);
   const [columnCount, setColumnCount] = useState(3);
 
   useEffect(() => {
@@ -28,11 +35,23 @@ export default function ImageGrid({ imageUrls = [] }: ImageGridProps) {
 
   const Cell = ({ columnIndex, rowIndex, style }: any) => {
     const index = rowIndex * columnCount + columnIndex;
-    console.log(index);
     if (index >= imageUrls.length) return null;
-
+    const imageData = data[index];
     return (
       <div style={style} className="p-1">
+        <div className="text-center text-white">
+          {imageData[KeyMapping.name]}
+          {imageData[KeyMapping.tags] &&
+            imageData[KeyMapping.tags].split(",").map((tag) => (
+              <Badge
+                className="ml-1 text-color-white"
+                key={tag}
+                variant={"outline"}
+              >
+                {tag}
+              </Badge>
+            ))}
+        </div>
         <img
           // open in new tab
           onClick={() => window.open(imageUrls[index])}
