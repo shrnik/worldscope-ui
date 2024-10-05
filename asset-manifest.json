@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/worldscope-ui/static/css/main.47c6e7e7.css",
-    "main.js": "/worldscope-ui/static/js/main.33cfacb4.js",
+    "main.js": "/worldscope-ui/static/js/main.cc684e0d.js",
     "static/js/453.6d299163.chunk.js": "/worldscope-ui/static/js/453.6d299163.chunk.js",
     "static/media/Geist-Regular.otf": "/worldscope-ui/static/media/Geist-Regular.9bfd8978eeffa6dc96c9.otf",
     "index.html": "/worldscope-ui/index.html",
     "main.47c6e7e7.css.map": "/worldscope-ui/static/css/main.47c6e7e7.css.map",
-    "main.33cfacb4.js.map": "/worldscope-ui/static/js/main.33cfacb4.js.map",
+    "main.cc684e0d.js.map": "/worldscope-ui/static/js/main.cc684e0d.js.map",
     "453.6d299163.chunk.js.map": "/worldscope-ui/static/js/453.6d299163.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.47c6e7e7.css",
-    "static/js/main.33cfacb4.js"
+    "static/js/main.cc684e0d.js"
   ]
 }
