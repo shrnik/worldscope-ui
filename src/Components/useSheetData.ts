@@ -29,16 +29,27 @@ export function useFilteredSheetData() {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const { data, ...rest } = useSheetData();
-  if (!params.get("tags")) {
+  const nameFilter = params.get("name");
+  const tagsFilter = params.get("tags");
+  if (!tagsFilter && !nameFilter) {
     return {
       data,
       ...rest,
     };
   }
   const tags = params.get("tags")?.split(",") || [];
-  const filteredData = data?.filter((row) => {
-    return tags.some((tag) => row[KeyMapping.tags]?.includes(tag));
-  });
+  const filteredData = data
+    ?.filter((row) => {
+      return (
+        !tagsFilter || tags.some((tag) => row[KeyMapping.tags]?.includes(tag))
+      );
+    })
+    .filter((row) => {
+      return (
+        !nameFilter ||
+        row[KeyMapping.name]?.toLowerCase().includes(nameFilter.toLowerCase())
+      );
+    });
   return {
     data: filteredData,
     ...rest,

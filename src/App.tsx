@@ -1,15 +1,17 @@
 import "./App.css";
 import Main from "./Main";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
 
 function App() {
   return (
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/search" element={<Main />} />
-      </Routes>
-    </HashRouter>
+    <ChakraProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Main />} />
+        </Routes>
+      </BrowserRouter>
+    </ChakraProvider>
   );
 }
 

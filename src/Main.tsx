@@ -1,22 +1,53 @@
-import { cn } from "./lib/utils";
+import { Box, Text, Spinner } from "@chakra-ui/react";
 import ImageGrid from "./components/ImageGrid";
 import { useFilteredSheetData } from "./components/useSheetData";
 
 const Main = () => {
-  const { data, error, isLoading } = useFilteredSheetData();
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
   return (
-    <div className={cn("bg-zinc-950 dark:bg-white", "font-giest")}>
-      <div className="sticky top-0 z-10 bg-zinc-950 dark:bg-white">
-        <div className="text-left text-4xl font-extrabold text-white px-2 py-4">
+    <Box fontFamily="GiestRegular">
+      <Box position="sticky" top="0" zIndex="10" bg="white">
+        <Text
+          textAlign="left"
+          fontSize="4xl"
+          fontWeight="extrabold"
+          px="2"
+          py="4"
+        >
           Worldscope
-        </div>
-      </div>
-      <ImageGrid data={data} />
-    </div>
+        </Text>
+      </Box>
+      <Content />
+    </Box>
   );
+};
+
+const Content = () => {
+  const { data, isLoading } = useFilteredSheetData();
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="full"
+      >
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
+  if (data.length === 0) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="full"
+      >
+        <Text fontSize="2xl">No data found</Text>
+      </Box>
+    );
+  }
+  return <ImageGrid data={data} />;
 };
 
 export default Main;

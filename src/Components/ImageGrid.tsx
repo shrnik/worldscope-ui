@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { FixedSizeGrid as Grid } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import KeyMapping from "../keys";
-import { Badge } from "../components/ui/badge";
+import { Badge, Box, Image, Stack, Text } from "@chakra-ui/react";
 
 interface ImageGridProps {
   data: Record<string, string>[];
@@ -38,36 +38,33 @@ export default function ImageGrid({
     if (index >= imageUrls.length) return null;
     const imageData = data[index];
     return (
-      <div style={style} className="p-1">
-        <div className="text-center text-white">
-          {imageData[KeyMapping.name]}
-          {imageData[KeyMapping.tags] &&
-            imageData[KeyMapping.tags].split(",").map((tag) => (
-              <Badge
-                className="ml-1 text-color-white"
-                key={tag}
-                variant={"outline"}
-              >
-                {tag}
-              </Badge>
-            ))}
-        </div>
-        <img
-          // open in new tab
+      <Box style={style} p={1}>
+        <Box textAlign={"center"}>
+          <Text>
+            {imageData[KeyMapping.name]}
+
+            {imageData[KeyMapping.tags] &&
+              imageData[KeyMapping.tags].split(",").map((tag) => (
+                <Badge key={tag} variant="outline">
+                  {tag}
+                </Badge>
+              ))}
+          </Text>
+        </Box>
+        <Image
           onClick={() => window.open(imageUrls[index])}
           src={imageUrls[index]}
           alt={`Image ${index + 1}`}
           width={700}
-          height={500}
           loading="lazy"
-          className="rounded-lg cursor-pointer"
+          cursor="pointer"
         />
-      </div>
+      </Box>
     );
   };
 
   return (
-    <div className="w-full h-screen">
+    <Box w="full" className="mainContainer">
       <AutoSizer>
         {({ height, width }) => (
           <Grid
@@ -82,6 +79,6 @@ export default function ImageGrid({
           </Grid>
         )}
       </AutoSizer>
-    </div>
+    </Box>
   );
 }
