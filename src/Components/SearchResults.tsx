@@ -2,6 +2,8 @@
 // results are a list of images
 
 import React, { useEffect } from "react";
+import ReactTimeAgo from "react-time-ago";
+
 import {
   Box,
   Image,
@@ -10,6 +12,7 @@ import {
   InputGroup,
   InputRightElement,
   Button,
+  chakra,
 } from "@chakra-ui/react";
 
 interface SearchResultsProps {}
@@ -32,40 +35,49 @@ const SearchResults: React.FC<SearchResultsProps> = () => {
 
   return (
     <>
-      <InputGroup size="md" mb={4}>
-        <Input
-          pr="4.5rem"
-          placeholder="Search images"
-          ref={inputRef}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              setSearchString(inputRef.current?.value || "");
-            }
-          }}
-        />
-        <InputRightElement width="4.5rem">
-          <Button
-            h="1.75rem"
-            size="sm"
-            onClick={() => {
-              setSearchString(inputRef.current?.value || "");
+      <Box display="flex" justifyContent="center" mb={4} my={5}>
+        <InputGroup size="md" width="50%">
+          <Input
+            pr="4.5rem"
+            placeholder="Search images"
+            ref={inputRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setSearchString(inputRef.current?.value || "");
+              }
             }}
-          >
-            Search
-          </Button>
-        </InputRightElement>
-      </InputGroup>
+          />
+          <InputRightElement width="4.5rem">
+            <Button
+              h="1.75rem"
+              size="sm"
+              onClick={() => {
+                setSearchString(inputRef.current?.value || "");
+              }}
+              mr={2}
+            >
+              Search
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </Box>
       <Box
         display="grid"
-        gridTemplateColumns="repeat(auto-fill, minmax(200px, 1fr))"
+        gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
         gap={4}
       >
         {data.map((image: any) => (
-          <Image
-            src={image.url}
-            loading="lazy"
-            onClick={() => window.open(image.url, "_blank")}
-          />
+          <Box>
+            <chakra.span>
+              Updated <ReactTimeAgo date={image.updated_at} locale="en-US" />
+            </chakra.span>
+            <Image
+              src={image.url}
+              loading="lazy"
+              onClick={() => window.open(image.url, "_blank")}
+              title={image.cosineDistance}
+            />
+          </Box>
         ))}
       </Box>
     </>
