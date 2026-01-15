@@ -7,13 +7,14 @@ import ReactTimeAgo from "react-time-ago";
 import {
   Box,
   Image,
-  Text,
   Input,
   InputGroup,
   InputRightElement,
   Button,
   chakra,
 } from "@chakra-ui/react";
+import SearchResultsMap from "./SearchResultsMap";
+import { Result } from "./types";
 
 interface SearchResultsProps {}
 
@@ -21,7 +22,7 @@ const SearchResults: React.FC<SearchResultsProps> = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [searchString, setSearchString] = React.useState("");
 
-  const [data, setData] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<Result[]>([]);
 
   useEffect(() => {
     if (searchString) {
@@ -61,13 +62,14 @@ const SearchResults: React.FC<SearchResultsProps> = () => {
           </InputRightElement>
         </InputGroup>
       </Box>
+      {data.length > 0 && <SearchResultsMap results={data} height="500px" />}
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
         gap={4}
       >
-        {data.map((image: any) => (
-          <Box>
+        {data.map((image, idx) => (
+          <Box key={idx}>
             <chakra.span>
               Updated <ReactTimeAgo date={image.updated_at} locale="en-US" />
             </chakra.span>
@@ -75,11 +77,12 @@ const SearchResults: React.FC<SearchResultsProps> = () => {
               src={image.url}
               loading="lazy"
               onClick={() => window.open(image.url, "_blank")}
-              title={image.cosineDistance}
+              title={String(image.cosineDistance)}
             />
           </Box>
         ))}
       </Box>
+
     </>
   );
 };
