@@ -9,18 +9,29 @@ interface SearchResultsMapProps {
   height?: string | number;
 }
 
-// Interpolate between green (similar) and red (dissimilar) based on cosine distance
+// Interpolate between blue (similar) and red (dissimilar) based on cosine distance
+// Uses sigmoid-like function to skew colors towards extremes (min/max)
+// Opacity: 1 = closest to query (low distance), more transparent = farther
 const getColorFromDistance = (distance: number, minDist: number, maxDist: number): string => {
-  // Normalize distance to 0-1 range
+  // Normalize distance to 0-1 range (0 = closest, 1 = farthest)
   const range = maxDist - minDist;
   const normalized = range > 0 ? (distance - minDist) / range : 0;
 
-  // Green (low distance/high similarity) to Red (high distance/low similarity)
-  const r = Math.round(255 * normalized);
-  const g = Math.round(255 * (1 - normalized));
-  const b = 0;
+  // Apply sigmoid-like transformation to push values towards extremes
+  // This makes mid-range values closer to either end
+  const skewFactor = 3; // Higher = more extreme skewing
+  const skewed = 1 / (1 + Math.exp(-skewFactor * (normalized - 0.5) * 2));
 
-  return `rgb(${r}, ${g}, ${b})`;
+  // Blue (low distance/high similarity) to Red (high distance/low similarity)
+  const r = Math.round(255 * skewed);
+  const g = 0;
+  const b = Math.round(255 * (1 - skewed));
+
+  // Opacity: closer results (low distance) are more opaque
+  // Range from 0.3 (farthest) to 1.0 (closest)
+  const opacity = 1
+
+  return `rgba(${r}, ${g}, ${b}, ${opacity.toFixed(2)})`;
 };
 
 const SearchResultsMap: React.FC<SearchResultsMapProps> = ({ results, height = "500px" }) => {
