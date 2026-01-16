@@ -23,13 +23,18 @@ const SearchResults: React.FC<SearchResultsProps> = () => {
   const [searchString, setSearchString] = React.useState("");
 
   const [data, setData] = React.useState<Result[]>([]);
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     if (searchString) {
+      setLoading(true);
       fetch(`${process.env.REACT_APP_BASE_URL}/images?query=${searchString}`)
         .then((res) => res.json())
         .then((data) => {
           setData(data);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [searchString]);
@@ -56,19 +61,20 @@ const SearchResults: React.FC<SearchResultsProps> = () => {
                 setSearchString(inputRef.current?.value || "");
               }}
               mr={2}
+              isLoading={loading}
             >
               Search
             </Button>
           </InputRightElement>
         </InputGroup>
       </Box>
-      {data.length > 0 && <SearchResultsMap results={data} height="500px" />}
+      <SearchResultsMap results={data} height="500px" />
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
         gap={4}
       >
-        {data.map((image, idx) => (
+        {data.slice(0, 100).map((image, idx) => (
           <Box key={idx}>
             <chakra.span>
               Updated <ReactTimeAgo date={image.updated_at} locale="en-US" />

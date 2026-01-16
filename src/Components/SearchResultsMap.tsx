@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import Plot from "react-plotly.js";
 import { Box } from "@chakra-ui/react";
-import { meta } from "plotly.js/lib/scatter";
 import { Result } from "./types";
 
 
@@ -56,20 +55,12 @@ const SearchResultsMap: React.FC<SearchResultsMapProps> = ({ results, height = "
     return { lats, lons, colors, hoverTexts, sizes };
   }, [results]);
 
-  if (results.length === 0) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" height={height}>
-        No results to display on map
-      </Box>
-    );
-  }
-
   return (
     <Box width="100%" height={height}>
       <Plot
         data={[
           {
-            type: "scattergeo",
+            type: "scattermap",
             mode: "markers",
             lat: lats,
             lon: lons,
@@ -86,25 +77,15 @@ const SearchResultsMap: React.FC<SearchResultsMapProps> = ({ results, height = "
           },
         ]}
         layout={{
-          geo: {
-            projection: {
-              type: "natural earth",
-            },
-            showland: true,
-            landcolor: "rgb(243, 243, 243)",
-            countrycolor: "rgb(204, 204, 204)",
-            coastlinecolor: "rgb(204, 204, 204)",
-            showocean: true,
-            oceancolor: "rgb(230, 245, 255)",
-            showlakes: true,
-            lakecolor: "rgb(230, 245, 255)",
-          },
-          margin: { t: 10, b: 10, l: 10, r: 10 },
+          dragmode: "zoom",
+          map: { style: "open-street-map", center: { lat: 38, lon: -90 }, zoom: 3 },
+          margin: { r: 0, t: 0, b: 0, l: 0 },
           autosize: true,
         }}
         useResizeHandler
         style={{ width: "100%", height: "100%" }}
         config={{
+          scrollZoom: true,
           displayModeBar: true,
         }}
       />
